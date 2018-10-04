@@ -3,11 +3,11 @@ ME366J Design Project
 University of Texas at Austin
 
 # Team Members
-Adam Bolin
-Andy Castillo
-Lawrence Chan
-Akshay Kulkarni
-Hannah Myers
+Adam Bolin<br>
+Andy Castillo<br>
+Lawrence Chan<br>
+Akshay Kulkarni<br>
+Hannah Myers<br>
 Alex Thompson
 
 # Project Info
