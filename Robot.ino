@@ -1,4 +1,5 @@
 //Initialize variables and functions here
+// #define and #include
 
 //define pins for driving motor
 //reference documentation + howtomechatronics L298n bridge guide
@@ -30,14 +31,12 @@ void setup() {
   // 10 Hz update rate - for 9600 baud you'll have to set the output to RMC only (see above)
     //GPS.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
   // ***END GPS SETUP***
-
-  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
   // put your MAIN CODE HERE, to run REPEATEDLY:
 
-// read gps, optimally once every ms in an interrupt
+// read robot gps, optimally once every ms in an interrupt
   GPS.read()
   if(GPS.newNMEAreceived()==true){ //parse new data every loop
     GPS.parse(GPSlastNMEA())
@@ -49,17 +48,13 @@ void loop() {
         //GPS.angle, GPS.altitude (cm), GPS.sattelites (if ALLDATA enabled)
   }
 
-// NOTE: example analog read code
-  // read the input on analog pin 0:
-  int sensorValue = analogRead(A0);
-  // print out the value you read:
-  Serial.println(sensorValue);
-// NOTE: example digital read code
-  // read the input pin:
-  int buttonState = digitalRead(pushButton);
-  // print out the state of the button:
-  Serial.println(buttonState);
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1);        // delay in between writes for stability
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+// read transmitter gps values, build GPS vector by difference
+
+// using gps vector, activate motor controller
+    //if obstacle, rotate in 10degree increments until robot can proceed
+    //no rotation greater than 120deg?
+    //need to reference lidar code
+
+
+//end program
 }
