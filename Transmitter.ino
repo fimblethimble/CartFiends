@@ -1,15 +1,5 @@
 //Initialize variables and functions here
 
-//define pins for driving motor
-//reference documentation + howtomechatronics L298n bridge guide
-//will need to determine which output pins to use for drive - 6 pins.
-#define in1 5  //HbridgeA 1
-#define in2 6  //HbridgeA 2
-#define in3 7  //HbridgeB 1
-#define in4 8  //HbridgeB 2
-#define enA 9  //PWM1
-#define enB 10 //PWM2
-
 void setup() {
   // put your SETUP CODE HERE, to run ONCE:
   Serial.begin(9600) // start 9600 bits/s serial communication
@@ -30,12 +20,11 @@ void setup() {
   // 10 Hz update rate - for 9600 baud you'll have to set the output to RMC only (see above)
     //GPS.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
   // ***END GPS SETUP***
-
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
-  // put your MAIN CODE HERE, to run REPEATEDLY:
+// put your MAIN CODE HERE, to run REPEATEDLY:
 
 // read gps, optimally once every ms in an interrupt
   GPS.read()
@@ -48,18 +37,6 @@ void loop() {
         //GPS.latitude, GPS.longitude, GPS.speed (knots)
         //GPS.angle, GPS.altitude (cm), GPS.sattelites (if ALLDATA enabled)
   }
-
-// NOTE: example analog read code
-  // read the input on analog pin 0:
-  int sensorValue = analogRead(A0);
-  // print out the value you read:
-  Serial.println(sensorValue);
-// NOTE: example digital read code
-  // read the input pin:
-  int buttonState = digitalRead(pushButton);
-  // print out the state of the button:
-  Serial.println(buttonState);
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1);        // delay in between writes for stability
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+//SECOND GOAL: Send parsed data to primary arduino
+  //code to follow. Will change depending on if we use TI transceiver or ASK RF transceiver
 }
