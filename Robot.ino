@@ -1,60 +1,147 @@
-//Initialize variables and functions here
+//Initialize variables, functions, libraries here
 // #define and #include
 
 //define pins for driving motor
-//reference documentation + howtomechatronics L298n bridge guide
-//will need to determine which output pins to use for drive - 6 pins.
-#define in1 5  //HbridgeA 1
-#define in2 6  //HbridgeA 2
-#define in3 7  //HbridgeB 1
-#define in4 8  //HbridgeB 2
-#define enA 9  //PWM1
-#define enB 10 //PWM2
+//MAKE SURE THE INPUTS ARE WIRED TO THESE PINS
+    //Motor1
+#define in1 10 //HbridgeA 1
+#define in2 9  //HbridgeA 2
+#define enA 8  //PWM1
+    //Motor2
+#define in3 5  //HbridgeB 1
+#define in4 7  //HbridgeB 2
+#define enB 6  //PWM2
 
-void setup() {
+void setup()
+{
   // put your SETUP CODE HERE, to run ONCE:
   Serial.begin(9600) // start 9600 bits/s serial communication
                      // Needed for monitoring on computer
-  // ***BEGIN GPS SETUP***
-  // You can adjust which sentences to have the module emit, below
-  // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
-    //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-  // uncomment this line to turn on only the "minimum recommended" data for high update rates!
-    GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
-  // uncomment this line to turn on all the available data - for 9600 baud you'll want 1 Hz rate
-    //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
-  // Set the update rate
-  // 1 Hz update rate
-    //GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
-  // 5 Hz update rate- for 9600 baud you'll have to set the output to RMC or RMCGGA only (see above)
-    GPS.sendCommand(PMTK_SET_NMEA_UPDATE_5HZ);
-  // 10 Hz update rate - for 9600 baud you'll have to set the output to RMC only (see above)
-    //GPS.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
-  // ***END GPS SETUP***
+   // set all the motor control pins to outputs
+   pinMode(enA, OUTPUT);
+   pinMode(enB, OUTPUT);
+   pinMode(in1, OUTPUT);
+   pinMode(in2, OUTPUT);
+   pinMode(in3, OUTPUT);
+   pinMode(in4, OUTPUT);
 }
-
-void loop() {
-  // put your MAIN CODE HERE, to run REPEATEDLY:
-
-// read robot gps, optimally once every ms in an interrupt
-  GPS.read()
-  if(GPS.newNMEAreceived()==true){ //parse new data every loop
-    GPS.parse(GPSlastNMEA())
-    //Available data from parsed NMEA:
-      //GPS.day, GPS.month, GPS.year
-      //GPS.fix (1=fix, 0=no fix)
-      //IF fix = 1, we can ask:
-        //GPS.latitude, GPS.longitude, GPS.speed (knots)
-        //GPS.angle, GPS.altitude (cm), GPS.sattelites (if ALLDATA enabled)
+//NOTE: functions will be listed first, then main method calls them at the end
+void forward()
+{
+  // this function will run the motors in one direction at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 200);
+  // turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 200);
+  delay(2000); //NOTE: Delay = motor runtime
+  // now turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+void reverse()
+{
+  // this function will run the motors in one direction at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 200);
+  // turn on motor B
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 200);
+  delay(2000); //NOTE: Delay = motor runtime
+  // now turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+void right() //NOTE: NEED TO TEST MOTOR DIRECTION
+{
+  // this function will run the motors in both directions at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 200);
+  // turn on motor B
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 200);
+  // run motors for delay(runtime)
+  delay(2000);
+  // turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+void left() //NOTE: NEED TO TEST MOTOR DIRECTION
+{
+  // this function will run the motors in both directions at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 200);
+  // turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 200);
+  delay(2000); //NOTE: Delay = motor runtime
+  // turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+void demoTwo()  //acceleration motor demo
+{
+  // this function will run the motors across the range of possible speeds
+  // note that maximum speed is determined by the motor itself and the operating voltage
+  // the PWM values sent by analogWrite() are fractions of the maximum speed possible
+  // by your hardware
+  // turn on motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  // accelerate from zero to maximum speed
+  for (int i = 0; i < 256; i++)
+  {
+    analogWrite(enA, i);
+    analogWrite(enB, i);
+    delay(20);
   }
-
-// read transmitter gps values, build GPS vector by difference
-
-// using gps vector, activate motor controller
-    //if obstacle, rotate in 10degree increments until robot can proceed
-    //no rotation greater than 120deg?
-    //need to reference lidar code
-
-
-//end program
+  // decelerate from maximum speed to zero
+  for (int i = 255; i >= 0; --i)
+  {
+    analogWrite(enA, i);
+    analogWrite(enB, i);
+    delay(20);
+  }
+  // now turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+void loop() // main method to call the rest
+{
+  //demoOne();
+  //delay(1000);
+  demoTwo();
+  delay(1000);
 }
