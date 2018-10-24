@@ -1,31 +1,49 @@
-//Initialize variables, functions, libraries here
+// Initialize variables, functions, libraries here
 // #define and #include
-
-//define pins for driving motor
-//MAKE SURE THE INPUTS ARE WIRED TO THESE PINS
-    //Motor1
-#define in1 10 //HbridgeA 1
-#define in2 9  //HbridgeA 2
-#define enA 8  //PWM1
-    //Motor2
-#define in3 5  //HbridgeB 1
-#define in4 7  //HbridgeB 2
-#define enB 6  //PWM2
+#include <NewPing.h>     // NewPing Library to read ultrasonic sensors
+#include <ZumoMotors.h>  // Pixy2 Libraries
+#include <Pixy2.h>
+#include <Pixy2Line.h>
+#include <Pixy2Video.h>
+#include <TPixy2.h>
+#include <Pixy2CCC.h>
+#include <Pixy2I2C.h>
+#include <Pixy2UART.h>
+#include <ZumoBuzzer.h>
+#include <PIDLoop.h>
+#include <Pixy2SPI_SS.h> //end Pixy2 Libraries
+// define pins for driving motor
+// MAKE SURE THE INPUTS ARE WIRED TO THESE PINS
+    // Motor1
+#define in1 10 // HbridgeA 1
+#define in2 9  // HbridgeA 2
+#define enA 8  // PWM1
+    // Motor2
+#define in3 5  // HbridgeB 1
+#define in4 7  // HbridgeB 2
+#define enB 6  // PWM2
+// define pins for ultrasonic array
+#define TRIGGER_PIN 1 // decide what pins later
+#define ECHO_PIN 1    // I believe these can be mapped to TX/RX pins
+#define MAX_DISTANCE 300
+// set new ping at defined pins/distance. MAX_DISTANCE is optional.
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE)
 
 void setup()
 {
   // put your SETUP CODE HERE, to run ONCE:
-  Serial.begin(9600) // start 9600 bits/s serial communication
-                     // Needed for monitoring on computer
-   // set all the motor control pins to outputs
-   pinMode(enA, OUTPUT);
-   pinMode(enB, OUTPUT);
-   pinMode(in1, OUTPUT);
-   pinMode(in2, OUTPUT);
-   pinMode(in3, OUTPUT);
-   pinMode(in4, OUTPUT);
+  Serial.begin(115200); // start 115200bt/s communication for NewPing
+  // set all the motor control pins to outputs
+  pinMode(enA, OUTPUT);
+  pinMode(enB, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
 }
-//NOTE: functions will be listed first, then main method calls them at the end
+//
+// NOTE: functions will be listed first, then main method calls them at the end
+//
 void forward()
 {
   // this function will run the motors in one direction at a fixed speed
@@ -46,6 +64,7 @@ void forward()
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
+//
 void reverse()
 {
   // this function will run the motors in one direction at a fixed speed
@@ -66,7 +85,8 @@ void reverse()
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
-void right() //NOTE: NEED TO TEST MOTOR DIRECTION
+//
+void right() // NOTE: NEED TO TEST MOTOR DIRECTION
 {
   // this function will run the motors in both directions at a fixed speed
   // turn on motor A
@@ -87,6 +107,7 @@ void right() //NOTE: NEED TO TEST MOTOR DIRECTION
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
+//
 void left() //NOTE: NEED TO TEST MOTOR DIRECTION
 {
   // this function will run the motors in both directions at a fixed speed
@@ -107,6 +128,7 @@ void left() //NOTE: NEED TO TEST MOTOR DIRECTION
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
+//
 void demoTwo()  //acceleration motor demo
 {
   // this function will run the motors across the range of possible speeds
@@ -138,10 +160,11 @@ void demoTwo()  //acceleration motor demo
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
+//
 void loop() // main method to call the rest
 {
-  //demoOne();
-  //delay(1000);
+  // demoOne();
+  // delay(1000);
   demoTwo();
   delay(1000);
 }
