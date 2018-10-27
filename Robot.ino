@@ -1,17 +1,16 @@
 // Initialize variables, functions, libraries here
 // #define and #include
-#include <NewPing.h>     // NewPing Library to read ultrasonic sensors
-#include <ZumoMotors.h>  // Pixy2 Libraries
-#include <Pixy2.h>
+#include <PIDLoop.h>      // NewPing Library to read ultrasonic sensors
+#include <Pixy2.h>        // Pixy2 Libraries
+#include <Pixy2CCC.h>     // Need to review Pixy documentation
+#include <Pixy2I2C.h>     // to determine which of these are necessary.
 #include <Pixy2Line.h>
+#include <Pixy2SPI_SS.h>
+#include <Pixy2UART.h>
 #include <Pixy2Video.h>
 #include <TPixy2.h>
-#include <Pixy2CCC.h>
-#include <Pixy2I2C.h>
-#include <Pixy2UART.h>
 #include <ZumoBuzzer.h>
-#include <PIDLoop.h>
-#include <Pixy2SPI_SS.h> //end Pixy2 Libraries
+#include <ZumoMotors.h>   //end Pixy2 Libraries
 // define pins for driving motor
 // MAKE SURE THE INPUTS ARE WIRED TO THESE PINS
     // Motor1
@@ -24,15 +23,15 @@
 #define enB 6  // PWM2
 // define pins for ultrasonic array
 #define TRIGGER_PIN 1 // decide what pins later
-#define ECHO_PIN 1    // I believe these can be mapped to TX/RX pins
+#define ECHO_PIN 0    // I believe these can be mapped to TX/RX pins
 #define MAX_DISTANCE 300
 // set new ping at defined pins/distance. MAX_DISTANCE is optional.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE)
-
+Pixy pixy; // initialize global instance of pixy
 void setup()
 {
   // put your SETUP CODE HERE, to run ONCE:
-  Serial.begin(115200); // start 115200bt/s communication for NewPing
+  Serial.begin(115200); // start 115200bt/s communication for NewPing & cam
   // set all the motor control pins to outputs
   pinMode(enA, OUTPUT);
   pinMode(enB, OUTPUT);
