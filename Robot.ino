@@ -33,15 +33,20 @@
   int calHeight = 33; //Calibrated height reading
   int pixelsWidth;   //read by the camera
   int pixelsHeight; //read by the camera
+  int xPosition;    //read by camera
+  int yPosition;    //read by camera
   float distanceWidth;   //calculated distance based on the width of the object
   float distanceHeight;  //calculated distance based on the height of the object
   float widthOfObject = 3.0; //inches (3.75 inches) real size of your object
   float heightOfObject = 3.0; //inches (2.5 inches) real size of your object
   int focalLengthWidth;  //calculated focal length for width
   int focalLengthHeight; //calculated focal length for height
+  int xDifference; //difference between xpos and center
   float avg;
   int feet;
   int inches;
+  int xCenter = 157;
+  int yCenter = 103;
   //Formula = FocalLengthWidth = (pixels * knowdistanceininches) / widthOfObject
   //Distance = (widthOfObject * FocalLengthWidth) / pixelsWidth
   //focal length and distance for height is calculated the same way replacing width with height values
@@ -76,7 +81,7 @@
 void setup()
 {
   // put your SETUP CODE HERE, to run ONCE:
-    Serial.begin(115200); // start 115200baud communication for camera
+    Serial.begin(9600); // start 115200baud communication for camera
     Serial.print("Begin Serial Monitor\n");
   // set all the motor control pins to outputs
     pinMode(enA,OUTPUT);
@@ -87,7 +92,7 @@ void setup()
     pinMode(in4,OUTPUT);
   // initialize pixycam
     pixy.init();
-    pixy.changeProg("color_connected_components"); // select CCC pixycam program
+    //pixy.changeProg("color_connected_components"); // select CCC pixycam program
     //calculate focal length
     focalLengthWidth = (calWidth * calDistance) / widthOfObject;
     focalLengthHeight = (calHeight * calDistance) / heightOfObject;
@@ -147,27 +152,6 @@ void driveForward()
 {
   // this function will run the motors in one direction at a fixed speed
   // turn on motor A
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  // set speed to 200 out of possible range 0~255
-  analogWrite(enA, 255);
-  // turn on motor B
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
-  // set speed to 200 out of possible range 0~255
-  analogWrite(enB, 255);
-  delay(2000); //NOTE: Delay = motor runtime
-  // now turn off motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
-}
-//
-void driveReverse()
-{
-  // this function will run the motors in one direction at a fixed speed
-  // turn on motor A
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   // set speed to 200 out of possible range 0~255
@@ -185,7 +169,28 @@ void driveReverse()
   digitalWrite(in4, LOW);
 }
 //
-void turnRight() // NOTE: NEED TO TEST MOTOR DIRECTION
+void driveReverse()
+{
+  // this function will run the motors in one direction at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 255);
+  // turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 255);
+  delay(500); //NOTE: Delay = motor runtime
+  // now turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+//
+void turnLeft() // NOTE: NEED TO TEST MOTOR DIRECTION
 {
   // this function will run the motors in both directions at a fixed speed
   // turn on motor A
@@ -207,7 +212,7 @@ void turnRight() // NOTE: NEED TO TEST MOTOR DIRECTION
   digitalWrite(in4, LOW);
 }
 //
-void turnLeft() //NOTE: NEED TO TEST MOTOR DIRECTION
+void turnRight() //NOTE: NEED TO TEST MOTOR DIRECTION
 {
   // this function will run the motors in both directions at a fixed speed
   // turn on motor A
@@ -227,13 +232,14 @@ void turnLeft() //NOTE: NEED TO TEST MOTOR DIRECTION
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
-void stop() //turns off all motors
+void driveStop() //turns off all motors
 {
   // turn off motors
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
+  delay(2000);
 }
 //
 void demoTwo()  //acceleration motor demo
@@ -320,31 +326,41 @@ blocks = pixy.ccc.getBlocks();
         //Serial.print(buf);
         pixelsWidth = pixy.ccc.blocks[j].m_width;
         pixelsHeight = pixy.ccc.blocks[j].m_height;
-        xPosition = pixy.ccc.blocks[i].m_x;
-        yPosition = pixy.ccc.blocks[i].m_y;
+        xPosition = pixy.ccc.blocks[j].m_x;
+        yPosition = pixy.ccc.blocks[j].m_y;
         distanceWidth = (widthOfObject * focalLengthWidth) / pixelsWidth;
         distanceHeight = (heightOfObject * focalLengthHeight) / pixelsHeight;
         avg = (distanceWidth + distanceHeight)/2;
         avg = round(avg);
         feet = avg/12;
         inches = int(avg) % 12;
+        Serial.print("x pos: ");
+        Serial.print(xPosition);
+        Serial.print(" - ");
+        Serial.print("xCenter: ");
+        Serial.println(xCenter);
         xDifference = (xPosition-xCenter);
-
-        if (xDifference >=0 && abs(xDifference)>=20) // if object is on right half of frame
+        Serial.println(xDifference);
+        if (xDifference >=0 && abs(xDifference)>=50) // if object is on right half of frame
         {
           turnRight();
+          Serial.println("Right");
         }
-        if (xDifference <=0 && abs(xDifference)>=20) // if object is on right half of frame
+        if (xDifference <=0 && abs(xDifference)>=50) // if object is on right half of frame
         {
           turnLeft();
+          Serial.println("Left");
         }
-        if (xDifference<20) // if object is on right half of frame
+        if (abs(xDifference)<50 && avg >= 22) // if object is on right half of frame
         {
           driveForward();
+          Serial.println("Forward");
         }
-        if (avg) < 15
+        if (avg < 22)
         {
-          stop();
+          driveStop();
+          driveReverse();
+          Serial.println("Stop");
         }
         //Serial.print("Width: ");
         //Serial.print(pixelsWidth);
@@ -357,8 +373,8 @@ blocks = pixy.ccc.getBlocks();
         //Serial.print(distanceHeight);
         Serial.print("Average: ");
         Serial.print(avg);
-        Serial.print("in. ");
-
+        Serial.println("in. ");
+        Serial.println("-----------------");
        }
      }
 }
