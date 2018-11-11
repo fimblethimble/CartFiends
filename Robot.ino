@@ -5,13 +5,13 @@
 // Motor Setup
   // MAKE SURE THE INPUTS ARE WIRED TO THESE PINS
       // Motor1
-  #define in1 10 // HbridgeA 1
-  #define in2 9  // HbridgeA 2
-  #define enA 8  // PWM1
+  #define in1 22 // HbridgeA 1
+  #define in2 23  // HbridgeA 2
+  #define enA 2  // PWM1
       // Motor2
-  #define in3 5  // HbridgeB 1
-  #define in4 7  // HbridgeB 2
-  #define enB 6  // PWM2
+  #define in3 24  // HbridgeB 1
+  #define in4 25  // HbridgeB 2
+  #define enB 3  // PWM2
 // Pixy Setup
   // Limit max velocity to highest PWM Value
   #define MAX_TRANSLATE_VELOCITY 255
