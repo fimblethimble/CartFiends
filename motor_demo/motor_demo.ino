@@ -7,9 +7,9 @@
 #define in2 23  // HbridgeA 2
 #define enA 2  // PWM1
     // Motor2
-#define in3 5  // HbridgeB 1
-#define in4 7  // HbridgeB 2
-#define enB 6  // PWM2
+#define in3 24  // HbridgeB 1
+#define in4 25 // HbridgeB 2
+#define enB 3  // PWM2
 // define pins for ultrasonic array
 #define TRIGGER_PIN 1 // decide what pins later
 #define ECHO_PIN 0    // I believe these can be mapped to TX/RX pins
@@ -39,16 +39,16 @@ void forward()
   // set speed to 200 out of possible range 0~255
   analogWrite(enA, 255);
   // turn on motor B
-  //digitalWrite(in3, HIGH);
-  //digitalWrite(in4, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
   // set speed to 200 out of possible range 0~255
-  //analogWrite(enB, 200);
+  analogWrite(enB, 200);
   delay(2000); //NOTE: Delay = motor runtime
   // now turn off motors
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
-  //digitalWrite(in3, LOW);
-  //digitalWrite(in4, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
 }
 //
 void reverse()
@@ -60,16 +60,16 @@ void reverse()
   // set speed to 200 out of possible range 0~255
   analogWrite(enA, 255);
   // turn on motor B
-  //digitalWrite(in3, LOW);
-  //digitalWrite(in4, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
   // set speed to 200 out of possible range 0~255
-  //analogWrite(enB, 200);
+  analogWrite(enB, 200);
   delay(2000); //NOTE: Delay = motor runtime
   // now turn off motors
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
-  //digitalWrite(in3, LOW);
-  //digitalWrite(in4, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
 }
 //
 void loop() // main method to call the rest

@@ -112,11 +112,11 @@ void ultrasonic()
     duration4 = pulseIn(echo4, HIGH);
     duration5 = pulseIn(echo5, HIGH);
   // Calculating the distance
-    distance1= duration1*0.034/2;
-    distance2= duration2*0.034/2;
-    distance3= duration3*0.034/2;
-    distance4= duration4*0.034/2;
-    distance5= duration5*0.034/2;
+    distance1 = duration1*0.034/2;
+    distance2 = duration2*0.034/2;
+    distance3 = duration3*0.034/2;
+    distance4 = duration4*0.034/2;
+    distance5 = duration5*0.034/2;
     // Prints the distance on the Serial Monitor
     //Serial.print("Distance1: ");
     //Serial.println(distance1);
