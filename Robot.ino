@@ -5,13 +5,13 @@
 // Motor Setup
   // MAKE SURE THE INPUTS ARE WIRED TO THESE PINS
       // Motor1
-  #define in1 10 // HbridgeA 1
-  #define in2 9  // HbridgeA 2
-  #define enA 8  // PWM1
+  #define in1 22 // HbridgeA 1
+  #define in2 23  // HbridgeA 2
+  #define enA 2  // PWM1
       // Motor2
-  #define in3 5  // HbridgeB 1
-  #define in4 7  // HbridgeB 2
-  #define enB 6  // PWM2
+  #define in3 24  // HbridgeB 1
+  #define in4 25  // HbridgeB 2
+  #define enB 3  // PWM2
 // Pixy Setup
   // Limit max velocity to highest PWM Value
   #define MAX_TRANSLATE_VELOCITY 255
@@ -31,6 +31,29 @@
   // CC2=Blue
   // CC3=Pink
 // Ultrasonic Setup
+  #define echo1=26
+  #define trig1=27
+  #define duration1=0
+  #define distance1=0
+  #define echo2=28
+  #define trig2=29
+  #define duration2=0
+  #define distance2=0
+  #define echo3=30
+  #define trig3=31
+  #define duration3=0
+  #define distance3=0
+  #define echo4=32
+  #define trig4=33
+  #define duration4=0
+  #define distance4=0
+  #define echo5=34
+  #define trig5=35
+  #define duration5=0
+  #define distance5=0
+  long duration;
+  long distance;
+// end declarations
 void setup()
 {
   // put your SETUP CODE HERE, to run ONCE:
@@ -43,13 +66,61 @@ void setup()
     pinMode(in2, OUTPUT);
     pinMode(in3, OUTPUT);
     pinMode(in4, OUTPUT);
-  // initialize pixyamc
-  pixy.init();
-  pixy.changeProg("color_connected_components"); // select CCC pixycam program
+  // initialize pixycam
+    pixy.init();
+    pixy.changeProg("color_connected_components"); // select CCC pixycam program
+  // set ultrasonic pins to input/output
+    pinmode(trig1,OUTPUT);
+    pinmode(echo1,INPUT);
+    pinmode(trig2,OUTPUT);
+    pinmode(echo2,INPUT);
+    pinmode(trig3,OUTPUT);
+    pinmode(echo3,INPUT);
+    pinmode(trig4,OUTPUT);
+    pinmode(echo4,INPUT);
+    pinmode(trig5,OUTPUT);
+    pinmode(echo5,INPUT);
 }
 //
 // NOTE: functions will be listed first, then main method calls them at the end
 //
+void ultrasonic()
+{
+  // Clears the trigPins
+    digitalWrite(trig1, LOW);
+    digitalWrite(trig2, LOW);
+    digitalWrite(trig3, LOW);
+    digitalWrite(trig4, LOW);
+    digitalWrite(trig5, LOW);
+    delayMicroseconds(2);
+  // Sets the trigPins on HIGH state for 10 micro seconds
+    digitalWrite(trig1, HIGH);
+    digitalWrite(trig2, HIGH);
+    digitalWrite(trig3, HIGH);
+    digitalWrite(trig4, HIGH);
+    digitalWrite(trig5, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig1, LOW);
+    digitalWrite(trig2, LOW);
+    digitalWrite(trig3, LOW);
+    digitalWrite(trig4, LOW);
+    digitalWrite(trig5, LOW);
+  // Reads the echoPins, returns the sound wave travel time in microseconds
+    duration1 = pulseIn(echo1, HIGH);
+    duration2 = pulseIn(echo2, HIGH);
+    duration3 = pulseIn(echo3, HIGH);
+    duration4 = pulseIn(echo4, HIGH);
+    duration5 = pulseIn(echo5, HIGH);
+  // Calculating the distance
+    distance1 = duration1*0.034/2;
+    distance2 = duration2*0.034/2;
+    distance3 = duration3*0.034/2;
+    distance4 = duration4*0.034/2;
+    distance5 = duration5*0.034/2;
+    // Prints the distance on the Serial Monitor
+    //Serial.print("Distance1: ");
+    //Serial.println(distance1);
+}
 void forward()
 {
   // this function will run the motors in one direction at a fixed speed
