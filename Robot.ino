@@ -31,6 +31,27 @@
   // CC2=Blue
   // CC3=Pink
 // Ultrasonic Setup
+  #define echo1=26
+  #define trig1=27
+  #define duration1=0
+  #define distance1=0
+  #define echo2=28
+  #define trig2=29
+  #define duration2=0
+  #define distance2=0
+  #define echo3=30
+  #define trig3=31
+  #define duration3=0
+  #define distance3=0
+  #define echo4=32
+  #define trig4=33
+  #define duration4=0
+  #define distance4=0
+  #define echo5=34
+  #define trig5=35
+  #define duration5=0
+  #define distance5=0
+// end declarations
 void setup()
 {
   // put your SETUP CODE HERE, to run ONCE:
@@ -50,6 +71,10 @@ void setup()
 //
 // NOTE: functions will be listed first, then main method calls them at the end
 //
+void ultrasonic()
+{
+
+}
 void forward()
 {
   // this function will run the motors in one direction at a fixed speed
