@@ -51,6 +51,8 @@
   #define trig5=35
   #define duration5=0
   #define distance5=0
+  long duration;
+  long distance;
 // end declarations
 void setup()
 {
@@ -64,16 +66,60 @@ void setup()
     pinMode(in2, OUTPUT);
     pinMode(in3, OUTPUT);
     pinMode(in4, OUTPUT);
-  // initialize pixyamc
-  pixy.init();
-  pixy.changeProg("color_connected_components"); // select CCC pixycam program
+  // initialize pixycam
+    pixy.init();
+    pixy.changeProg("color_connected_components"); // select CCC pixycam program
+  // set ultrasonic pins to input/output
+    pinmode(trig1,OUTPUT);
+    pinmode(echo1,INPUT);
+    pinmode(trig2,OUTPUT);
+    pinmode(echo2,INPUT);
+    pinmode(trig3,OUTPUT);
+    pinmode(echo3,INPUT);
+    pinmode(trig4,OUTPUT);
+    pinmode(echo4,INPUT);
+    pinmode(trig5,OUTPUT);
+    pinmode(echo5,INPUT);
 }
 //
 // NOTE: functions will be listed first, then main method calls them at the end
 //
 void ultrasonic()
 {
-
+  // Clears the trigPins
+    digitalWrite(trig1, LOW);
+    digitalWrite(trig2, LOW);
+    digitalWrite(trig3, LOW);
+    digitalWrite(trig4, LOW);
+    digitalWrite(trig5, LOW);
+    delayMicroseconds(2);
+  // Sets the trigPins on HIGH state for 10 micro seconds
+    digitalWrite(trig1, HIGH);
+    digitalWrite(trig2, HIGH);
+    digitalWrite(trig3, HIGH);
+    digitalWrite(trig4, HIGH);
+    digitalWrite(trig5, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig1, LOW);
+    digitalWrite(trig2, LOW);
+    digitalWrite(trig3, LOW);
+    digitalWrite(trig4, LOW);
+    digitalWrite(trig5, LOW);
+  // Reads the echoPins, returns the sound wave travel time in microseconds
+    duration1 = pulseIn(echo1, HIGH);
+    duration2 = pulseIn(echo2, HIGH);
+    duration3 = pulseIn(echo3, HIGH);
+    duration4 = pulseIn(echo4, HIGH);
+    duration5 = pulseIn(echo5, HIGH);
+  // Calculating the distance
+    distance1= duration1*0.034/2;
+    distance2= duration2*0.034/2;
+    distance3= duration3*0.034/2;
+    distance4= duration4*0.034/2;
+    distance5= duration5*0.034/2;
+    // Prints the distance on the Serial Monitor
+    //Serial.print("Distance1: ");
+    //Serial.println(distance1);
 }
 void forward()
 {
