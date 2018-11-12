@@ -139,11 +139,11 @@ void ultrasonic()
     duration4 = pulseIn(echo4, HIGH);
     duration5 = pulseIn(echo5, HIGH);
   // Calculating the distance
-    distance1 = duration1*0.034/2;
-    distance2 = duration2*0.034/2;
-    distance3 = duration3*0.034/2;
-    distance4 = duration4*0.034/2;
-    distance5 = duration5*0.034/2;
+    distance1 = duration1*0.393701*0.034/2;
+    distance2 = duration2*0.393701*0.034/2;
+    distance3 = duration3*0.393701*0.034/2;
+    distance4 = duration4*0.393701*0.034/2;
+    distance5 = duration5*0.393701*0.034/2;
     // Prints the distance on the Serial Monitor
     //Serial.print("Distance1: ");
     //Serial.println(distance1);
@@ -305,7 +305,22 @@ void loop()
   int j;
   uint16_t blocks;
   char buf[32];
-
+// single ultrasonic sensor loop
+// Clears the trigPins
+  digitalWrite(trig1, LOW);
+  delayMicroseconds(2);
+// Sets the trigPins on HIGH state for 10 micro seconds
+  digitalWrite(trig1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig1, LOW);
+// Reads the echoPins, returns the sound wave travel time in microseconds
+  duration1 = pulseIn(echo1, HIGH);
+// Calculating the distance
+  distance1 = duration1*0.393701*0.034/2;
+Serial.print("Ultrasonic distance: ");
+Serial.print(distance1);
+Serial.println(" in");
+//end ultrasonic loop
 blocks = pixy.ccc.getBlocks();
 
   if (blocks)
@@ -341,17 +356,17 @@ blocks = pixy.ccc.getBlocks();
         Serial.println(xCenter);
         xDifference = (xPosition-xCenter);
         Serial.println(xDifference);
-        if (xDifference >=0 && abs(xDifference)>=50) // if object is on right half of frame
+        if (xDifference >=0 && abs(xDifference)>=50 && distance1>=22) // if object is on right half of frame
         {
           turnRight();
           Serial.println("Right");
         }
-        if (xDifference <=0 && abs(xDifference)>=50) // if object is on right half of frame
+        if (xDifference <=0 && abs(xDifference)>=50 && distance1>=22) // if object is on right half of frame
         {
           turnLeft();
           Serial.println("Left");
         }
-        if (abs(xDifference)<50 && avg >= 22) // if object is on right half of frame
+        if (abs(xDifference)<50 && avg >= 22 && distance1>=22) // if object is on right half of frame
         {
           driveForward();
           Serial.println("Forward");
