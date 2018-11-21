@@ -13,7 +13,7 @@ void evadeleft(){
   // set speed to 200 out of possible range 0~255
   analogWrite(enB, 255);
   // run motors for delay(runtime)
-  delay(500);  //NOTE: Delay = motor runtime
+  delay(500);  //NOTE: Delay = motor runtime //should return cart back to original position
   //Move Forward
    // this function will run the motors in one direction at a fixed speed
   // turn on motor A
