@@ -1,5 +1,5 @@
 void evade() {
-if (distance1<30)
+if (distance1<30) // distance value for proximity sensor on front left corner
 {
   while (distance1<30)
  { //Turn right
@@ -35,7 +35,7 @@ if (distance1<30)
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
-if (distance3<30)
+if (distance3<30) //distance value for proximity sensor on front right corner
 {
   while (distance3<30)
   {
