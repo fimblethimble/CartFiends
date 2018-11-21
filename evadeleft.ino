@@ -1,4 +1,4 @@
-void evadeleft(){
+void evadeleft(){ //might be best to insert this code right before or after the delay part of the turnleft function
   if (distance1<30)
   {//Turn Right
     // this function will run the motors in both directions at a fixed speed
