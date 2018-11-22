@@ -1,4 +1,4 @@
-void evaderight(){
+void evaderight(){//might be best to insert this code right before or after the delay part of the turnright function
   if (distance3<30)
   {//Turn left
     // this function will run the motors in both directions at a fixed speed
