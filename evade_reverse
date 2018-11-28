@@ -1,0 +1,103 @@
+void evade_reverse() {//might be best to insert this code right before or after the delay part of the reverse function 
+ 
+if (distance4<30) // distance value for proximity sensor on the back left corner
+{
+ 
+ //Turn right to avoid collision
+
+// this function will run the motors in both directions at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 255);
+  // turn on motor B
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 255);  
+  delay(1000);
+//Move forward
+// this function will run the motors in one direction at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 255);
+  // turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 255);
+  delay(1000); //NOTE: Delay = motor runtime
+  //Turn left to return to original facing position
+  
+ // this function will run the motors in both directions at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 255);
+  // turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 255); 
+  delay(1000);
+  // now turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+if (distance5<30) //distance value for proximity sensor on the back right corner
+{
+ 
+    //turn left to avoid collision
+     // this function will run the motors in both directions at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 255);
+  // turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 255);
+delay(1000);
+//Move forward
+// this function will run the motors in one direction at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 255);
+  // turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 255);
+  delay(1000); //NOTE: Delay = motor runtime
+ 
+ //turn right to return to original position
+// this function will run the motors in both directions at a fixed speed
+  // turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enA, 255);
+  // turn on motor B
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  // set speed to 200 out of possible range 0~255
+  analogWrite(enB, 255);  
+  delay(1000);  
+  // now turn off motors
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+
+}
+}

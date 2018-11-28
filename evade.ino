@@ -1,5 +1,6 @@
-void evade() {
-if (distance1<30)
+void evade() {//might be best to insert this code right before or after the delay part of the driveforward function 
+  //and when it is called on by evadeleft and evaderight functions
+if (distance1<30) // distance value for proximity sensor on front left corner
 {
   while (distance1<30)
  { //Turn right
@@ -35,7 +36,7 @@ if (distance1<30)
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
 }
-if (distance3<30)
+if (distance3<30) //distance value for proximity sensor on front right corner
 {
   while (distance3<30)
   {

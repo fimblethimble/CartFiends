@@ -1,4 +1,4 @@
-void evaderight(){
+void evaderight(){//might be best to insert this code right before or after the delay part of the turnright function
   if (distance3<30)
   {//Turn left
     // this function will run the motors in both directions at a fixed speed
@@ -25,9 +25,10 @@ void evaderight(){
   digitalWrite(in4, LOW);
   // set speed to 200 out of possible range 0~255
   analogWrite(enB, 255);
-  evade();
+ 
   delay(2000); //NOTE: Delay = motor runtime
-  // now turn off motors
+  evade();// should it go after the delay?
+    // now turn off motors
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
   digitalWrite(in3, LOW);
