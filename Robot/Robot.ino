@@ -1,52 +1,64 @@
+// ME366J CartFiends
+//
 // Initialize variables, functions, libraries here
-  //folder copy to compile and run
+//folder copy to compile and run
 // #define and #include
-  #include <PIDLoop.h>      // NewPing Library to read ultrasonic sensors
-  #include <Pixy2.h>        // Pixy2 Libraries
+    #include <PIDLoop.h>      // NewPing Library to read ultrasonic sensors
+    #include <Pixy2.h>        // Pixy2 Libraries
 // Motor Setup
-  // MAKE SURE THE INPUTS ARE WIRED TO THESE PINS
-      // Motor1
-  #define in1 22 // HbridgeA 1
-  #define in2 23  // HbridgeA 2
-  #define enA 2  // PWM1
-      // Motor2
-  #define in3 24  // HbridgeB 1
-  #define in4 25  // HbridgeB 2
-  #define enB 3  // PWM2
+    int pwmA = 0;
+    int pwmB = 0;
+  // There are two motor drivers connected to each motor, with 3 inputs each.
+    // Motor1
+    #define in1 22  // HbridgeA 1 (A1)
+    #define in2 23  // HbridgeA 2 (A1)
+    #define in3 24  // HbridgeA 3 (A2)
+    #define in4 25  // HbridgeA 4 (A2)
+    #define enA1 2   // PWM: A1
+    #define enA2 3   // PWM: A2
+    // Motor2
+    #define in5 26  // HbridgeB 1 (B1)
+    #define in6 27  // HbridgeB 2 (B1)
+    #define in7 28  // HbridgeB 3 (B2)
+    #define in8 29  // HbridgeB 4 (B2)
+    #define enB1 4   // PWM: B1
+    #define enB2 5   // PWM: B2
 // Pixy Setup
   // Limit max velocity to highest PWM Value
-  #define MAX_TRANSLATE_VELOCITY 255
+    #define MAX_TRANSLATE_VELOCITY 255
   // min velocity may need to be 90 or 100 to avoid stalling.
-  #define MIN_VELOCITY 80
-  Pixy2 pixy; // initialize global instance of pixy
+    #define MIN_VELOCITY 80
+    Pixy2 pixy; // initialize global instance of pixy
   // define motor speeds
-  int speedLeft=0;
-  int speedRight=0;
+    int speedLeft=0;
+    int speedRight=0;
   // Define PIDLoops (Kp,Ki,Kd,boolean)
-  PIDLoop panLoop(350, 0, 600, true);
-  PIDLoop tiltLoop(500, 0, 700, true);
-  PIDLoop rotateLoop(300, 600, 300, false);
-  PIDLoop translateLoop(400, 800, 300, false);
+    PIDLoop panLoop(350, 0, 600, true);
+    PIDLoop tiltLoop(500, 0, 700, true);
+    PIDLoop rotateLoop(300, 600, 300, false);
+    PIDLoop translateLoop(400, 800, 300, false);
   //set up distance variables
-  #define calDistance 24 //in inches 24inches or 2 foot
-  int calWidth = 33; //Calibrated width reading
-  int calHeight = 33; //Calibrated height reading
-  int pixelsWidth;   //read by the camera
-  int pixelsHeight; //read by the camera
-  int xPosition;    //read by camera
-  int yPosition;    //read by camera
-  float distanceWidth;   //calculated distance based on the width of the object
-  float distanceHeight;  //calculated distance based on the height of the object
-  float widthOfObject = 3.0; //inches (3.75 inches) real size of your object
-  float heightOfObject = 3.0; //inches (2.5 inches) real size of your object
-  int focalLengthWidth;  //calculated focal length for width
-  int focalLengthHeight; //calculated focal length for height
-  int xDifference; //difference between xpos and center
-  float avg;
-  int feet;
-  int inches;
-  int xCenter = 157;
-  int yCenter = 103;
+    #define calDistance 24 //in inches 24inches or 2 foot
+  //NOTE: run the calibrate program to get distance coef. for different objects
+    int signature = 0; // stores color signature
+    int calWidth = 33; //Calibrated width reading
+    int calHeight = 33; //Calibrated height reading
+    int pixelsWidth;   //read by the camera
+    int pixelsHeight; //read by the camera
+    int xPosition;    //read by camera
+    int yPosition;    //read by camera
+    float distanceWidth;   //calculated distance based on the width of the object
+    float distanceHeight;  //calculated distance based on the height of the object
+    float widthOfObject = 3.0; //inches (3.75 inches) real size of your object
+    float heightOfObject = 3.0; //inches (2.5 inches) real size of your object
+    int focalLengthWidth;  //calculated focal length for width
+    int focalLengthHeight; //calculated focal length for height
+    int xDifference; //difference between xpos and center
+    float avg;
+    int feet;
+    int inches;
+    int xCenter = 157;
+    int yCenter = 103;
   //Formula = FocalLengthWidth = (pixels * knowdistanceininches) / widthOfObject
   //Distance = (widthOfObject * FocalLengthWidth) / pixelsWidth
   //focal length and distance for height is calculated the same way replacing width with height values
@@ -55,41 +67,47 @@
   // CC2=Blue
   // CC3=Pink
 // Ultrasonic Setup
-  const int  echo1=26;
-  const int  trig1=27;
-  int  duration1=0;
-  int  distance1=0;
-  const int  echo2=28;
-  const int  trig2=29;
-  int  duration2=0;
-  int  distance2=0;
-  const int  echo3=30;
-  const int  trig3=31;
-  int  duration3=0;
-  int  distance3=0;
-  const int  echo4=32;
-  const int  trig4=33;
-  int  duration4=0;
-  int  distance4=0;
-  const int  echo5=34;
-  const int  trig5=35;
-  int  duration5=0;
-  int  distance5=0;
-  long duration;
-  long distance;
+    const int  echo1=26;
+    const int  trig1=27;
+    int  duration1=0;
+    int  distance1=0;
+    const int  echo2=28;
+    const int  trig2=29;
+    int  duration2=0;
+    int  distance2=0;
+    const int  echo3=30;
+    const int  trig3=31;
+    int  duration3=0;
+    int  distance3=0;
+    const int  echo4=32;
+    const int  trig4=33;
+    int  duration4=0;
+    int  distance4=0;
+    const int  echo5=34;
+    const int  trig5=35;
+    int  duration5=0;
+    int  distance5=0;
+    long duration;
+    long distance;
 // end declarations
 void setup()
 {
   // put your SETUP CODE HERE, to run ONCE:
-    Serial.begin(9600); // start 115200baud communication for camera
+    Serial.begin(9600); // start 115200baud communication for camera?
     Serial.print("Begin Serial Monitor\n");
   // set all the motor control pins to outputs
-    pinMode(enA,OUTPUT);
-    pinMode(enB,OUTPUT);
+    pinMode(enA1,OUTPUT);
+    pinMode(enA2,OUTPUT);
+    pinMode(enB1,OUTPUT);
+    pinMode(enB2,OUTPUT);
     pinMode(in1,OUTPUT);
     pinMode(in2,OUTPUT);
     pinMode(in3,OUTPUT);
     pinMode(in4,OUTPUT);
+    pinMode(in5,OUTPUT);
+    pinMode(in6,OUTPUT);
+    pinMode(in7,OUTPUT);
+    pinMode(in8,OUTPUT;)
   // initialize pixycam
     pixy.init();
     //pixy.changeProg("color_connected_components"); // select CCC pixycam program
@@ -138,243 +156,265 @@ void ultrasonic()
     duration3 = pulseIn(echo3, HIGH);
     duration4 = pulseIn(echo4, HIGH);
     duration5 = pulseIn(echo5, HIGH);
-  // Calculating the distance
+  // Calculating the distance (inches)
     distance1 = duration1*0.393701*0.034/2;
     distance2 = duration2*0.393701*0.034/2;
     distance3 = duration3*0.393701*0.034/2;
     distance4 = duration4*0.393701*0.034/2;
     distance5 = duration5*0.393701*0.034/2;
-    // Prints the distance on the Serial Monitor
-    //Serial.print("Distance1: ");
-    //Serial.println(distance1);
 }
-void driveForward()
+void driveForward(pwmA, pwmB)
 {
-  // this function will run the motors in one direction at a fixed speed
+// this function will run the motors in one direction at a fixed speed
   // turn on motor A
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  // set speed to 200 out of possible range 0~255
-  analogWrite(enA, 255);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+  // set motor speed (PWM)
+    analogWrite(enA1, pwmA);
+    analogWrite(enA2, pwmA);
   // turn on motor B
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
+    digitalWrite(in5, LOW);
+    digitalWrite(in6, HIGH);
+    digitalWrite(in7, LOW);
+    digitalWrite(in8, HIGH);
   // set speed to 200 out of possible range 0~255
-  analogWrite(enB, 255);
-  delay(2000); //NOTE: Delay = motor runtime
-  // now turn off motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
+    analogWrite(enB1, pwmB);
+    analogWrite(enB2, pwmB);
+  // hold motor at these speeds for at least delay() time.
+  // if no other control signals sent, motor will maintain speed.
+    delay(250); //NOTE: Delay = motor runtime
+//NOTE: if motor control presents issues, include stop command.
 }
 //
 void driveReverse()
 {
   // this function will run the motors in one direction at a fixed speed
   // turn on motor A
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  // set speed to 200 out of possible range 0~255
-  analogWrite(enA, 255);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+  // set motor speed (PWM)
+    analogWrite(enA1, 255);
+    analogWrite(enA2, 255);
   // turn on motor B
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
-  // set speed to 200 out of possible range 0~255
-  analogWrite(enB, 255);
-  delay(500); //NOTE: Delay = motor runtime
-  // now turn off motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
+    digitalWrite(in5, HIGH);
+    digitalWrite(in6, LOW);
+    digitalWrite(in7, HIGH);
+    digitalWrite(in8, LOW);
+  // set motor speed (PWM)
+    analogWrite(enB1, 255);
+    analogWrite(enB2, 255);
+  // hold motor at these speeds for at least delay() time.
+  // if no other control signals sent, motor will maintain speed.
+    delay(250); //NOTE: Delay = motor runtime
 }
 //
-void turnLeft() // NOTE: NEED TO TEST MOTOR DIRECTION
+void turnLeft(pwmA, pwmB) // NOTE: NEED TO TEST MOTOR DIRECTION
 {
   // this function will run the motors in both directions at a fixed speed
   // turn on motor A
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  // set speed to 200 out of possible range 0~255
-  analogWrite(enA, 255);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);
+  // set motor speed (PWM)
+    analogWrite(enA1, pwmA);
+    analogWrite(enA2, pwmA);
   // turn on motor B
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
+    digitalWrite(in5, LOW);
+    digitalWrite(in6, HIGH);
+    digitalWrite(in7, LOW);
+    digitalWrite(in8, HIGH);
   // set speed to 200 out of possible range 0~255
-  analogWrite(enB, 255);
-  // run motors for delay(runtime)
-  delay(500);  //NOTE: Delay = motor runtime
-  // turn off motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
+    analogWrite(enB1, pwmB);
+    analogWrite(enB2, pwmB);
+  // hold motor at these speeds for at least delay() time.
+  // if no other control signals sent, motor will maintain speed.
+    delay(250); //NOTE: Delay = motor runtime
 }
 //
-void turnRight() //NOTE: NEED TO TEST MOTOR DIRECTION
+void turnRight(pwmA, pwmB) //NOTE: NEED TO TEST MOTOR DIRECTION
 {
   // this function will run the motors in both directions at a fixed speed
   // turn on motor A
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  // set speed to 200 out of possible range 0~255
-  analogWrite(enA, 255);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+  // set motor speed (PWM)
+    analogWrite(enA1, pwmA);
+    analogWrite(enA2, pwmA);
   // turn on motor B
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
+    digitalWrite(in5, HIGH);
+    digitalWrite(in6, LOW);
+    digitalWrite(in7, HIGH);
+    digitalWrite(in8, LOW);
   // set speed to 200 out of possible range 0~255
-  analogWrite(enB, 255);
-  delay(500); //NOTE: Delay = motor runtime
-  // turn off motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
+    analogWrite(enB1, pwmB);
+    analogWrite(enB2, pwmB);
+  // hold motor at these speeds for at least delay() time.
+  // if no other control signals sent, motor will maintain speed.
+    delay(250); //NOTE: Delay = motor runtime
 }
 void driveStop() //turns off all motors
 {
   // turn off motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
-  delay(2000);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+    digitalWrite(in5, LOW);
+    digitalWrite(in6, LOW);
+    digitalWrite(in7, LOW);
+    digitalWrite(in8, LOW);
+  // Maintain "STOP" for at least delat() time.
+    delay(250);
 }
-//
-void demoTwo()  //acceleration motor demo
-{
-  // this function will run the motors across the range of possible speeds
-  // note that maximum speed is determined by the motor itself and the operating voltage
-  // the PWM values sent by analogWrite() are fractions of the maximum speed possible
-  // by your hardware
-  // turn on motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
-  // accelerate from zero to maximum speed
-  for (int i = 0; i < 256; i++)
-  {
-    analogWrite(enA, i);
-    analogWrite(enB, i);
-    delay(20);
-  }
-  // decelerate from maximum speed to zero
-  for (int i = 255; i >= 0; --i)
-  {
-    analogWrite(enA, i);
-    analogWrite(enB, i);
-    delay(20);
-  }
-  // now turn off motors
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
-}
-// CAMERA FUNCTIONS //
-// Find largest block (index 0 = largest) at least .25s old (15 frames)
-// Return block index, if no block return -1.
-// "Locks on" to object
+//----CAMERA SUBFUNCTIONS----//
 int16_t acquireBlock()
 {
-  if (pixy.ccc.numBlocks && pixy.ccc.blocks[0].m_age>15)
-    return pixy.ccc.blocks[0].m_index;
+  // Find largest block (index 0 = largest) at least .25s old (15 frames)
+  // Return block index, if no block return -1.
+  // "Locks on" to object
+    if (pixy.ccc.numBlocks && pixy.ccc.blocks[0].m_age>15)
+      return pixy.ccc.blocks[0].m_index;
 
-  return -1;
+    return -1;
 }
 // Find block with the index detailed in int16_t acquireBlock()
 // within the current frame. If block not found, return NULL
 Block *trackBlock(uint8_t index)
 {
-  uint8_t i;
-
-  for (i=0; i<pixy.ccc.numBlocks; i++)
-  {
-    if (index==pixy.ccc.blocks[i].m_index)
-      return &pixy.ccc.blocks[i];
-  }
-
-  return NULL;
+    uint8_t i;
+  //Using acquireBlock(), find block that matches the index and return it.
+    for (i=0; i<pixy.ccc.numBlocks; i++)
+    {
+      if (index==pixy.ccc.blocks[i].m_index)
+        return &pixy.ccc.blocks[i];
+    }
+  // if it doesn't match, do nothing.
+    return NULL;
 }
-// When we have the object,
-void loop()
+//--END CAMERA SUBFUNCTIONS--//
+void loop() // need a "no object found" case
 {
-  static int i = 0;
-  int j;
-  uint16_t blocks;
-  char buf[32];
-// single ultrasonic sensor loop
-// Clears the trigPins
-  digitalWrite(trig1, LOW);
-  delayMicroseconds(2);
-// Sets the trigPins on HIGH state for 10 micro seconds
-  digitalWrite(trig1, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trig1, LOW);
-// Reads the echoPins, returns the sound wave travel time in microseconds
-  duration1 = pulseIn(echo1, HIGH);
-// Calculating the distance
-  distance1 = duration1*0.393701*0.034/2;
-Serial.print("Ultrasonic distance: ");
-Serial.print(distance1);
-Serial.println(" in");
-//end ultrasonic loop
-blocks = pixy.ccc.getBlocks();
-
-  if (blocks)
+  // At every loop, check proximity sensors first. (~20 microsec)
+    ultrasonic();
+  // Initialize values for blocks array
+    static int i = 0;
+    int j;
+    uint16_t blocks;
+    char buf[32];
+  // Search for blocks:
+    blocks = pixy.ccc.getBlocks();
+    if (blocks)
     {
     i++;
-
-   // do this (print) every 50 frames because printing every
-   // frame would bog down the Arduino
-   if (i%50==0)
+  // IF there is a block added to array, run the following:
+  // 1) Every FIVE frames, print block data. Previously 50.
+  // NOTE: need to verify if this i = frames or # of blocks
+    if (i%5==0)
     {
-
       sprintf(buf, "Detected %d:\n", blocks);
       Serial.print(buf);
-          }
-      for (j=0; j<blocks; j++)
-      {
-        //sprintf(buf, "  block %d: ", j);
-        //Serial.print(buf);
+    }
+  // 2) For each block detected, return data and send control signals
+    for (j=0; j<blocks; j++)
+    {
+    // Maybe print the J index here to tell if its processing multiple objs.
+    // sprintf(buf, "  block %d: ", j);
+    // Serial.print(buf);
+    // Calculate positional data
+        signature = pixy.ccc.blocks[j].m_signature; // get color sig as int(?)
         pixelsWidth = pixy.ccc.blocks[j].m_width;
         pixelsHeight = pixy.ccc.blocks[j].m_height;
         xPosition = pixy.ccc.blocks[j].m_x;
         yPosition = pixy.ccc.blocks[j].m_y;
+        xDifference = (xPosition-xCenter);
+        xDifferenceABS = abs(xDifference);
         distanceWidth = (widthOfObject * focalLengthWidth) / pixelsWidth;
         distanceHeight = (heightOfObject * focalLengthHeight) / pixelsHeight;
-        avg = (distanceWidth + distanceHeight)/2;
+        avg = (distanceWidth + distanceHeight)/2; // ??
         avg = round(avg);
-        feet = avg/12;
-        inches = int(avg) % 12;
+        feet = avg/12;          //integer no. feet
+        inches = int(avg) % 12; //inches remaining (eg 5' 3")
+    // Print x positional data
         Serial.print("x pos: ");
         Serial.print(xPosition);
         Serial.print(" - ");
         Serial.print("xCenter: ");
         Serial.println(xCenter);
-        xDifference = (xPosition-xCenter);
+        Serial.print(" - ");
+        Serial.print("xDifference: ");
         Serial.println(xDifference);
-        if (xDifference >=0 && abs(xDifference)>=50 && distance1>=22) // if object is on right half of frame
-        {
-          turnRight();
-          Serial.println("Right");
-        }
-        if (xDifference <=0 && abs(xDifference)>=50 && distance1>=22) // if object is on right half of frame
-        {
-          turnLeft();
-          Serial.println("Left");
-        }
-        if (abs(xDifference)<50 && avg >= 22 && distance1>=22) // if object is on right half of frame
+    // Navigation and Control Signals here
+      // Based on magnitude of X offset, set motor speed.
+        /*
+        if (abs(xDifference)<50 && avg >= 22) // if object in center region
         {
           driveForward();
           Serial.println("Forward");
         }
+        */
+        //
+        // The first two IF statements cover the forward driving case.
+        //
+        if (xDifference)<=0 && xDifference> -50)
+        {
+          // if the x offset is between 0 & -50, scale one PWM speed down
+          pwmA=255-(2*xDifferenceABS); // Right wheel slower than left
+          pwmB=255;
+          driveForward(pwmA,pwmB);
+          Serial.println("forward/right")
+        }
+        if (xDifference>=0 && xDifference< 50)
+        {
+          // if the x offset is between 0 & 50, scale one PWM speed down
+          pwmA=255;
+          pwmB=255-(2*abs(xDifference)); // Left wheel slower than right
+          driveForward(pwmA,pwmB);
+          Serial.println("forward/left")
+        }
+        //
+        // The next two IF statements set the speed for left/right turning
+        //
+        if (xDifferenceABS>=50 && xDifferenceABS<100)
+        {
+          // if the x offset is between 50 and 100, set speed slower
+          pwmA=150;
+          pwmB=150;
+        }
+        if (xDifferenceABS>=100 && xDifferenceABS<160)
+        {
+          // if the x offset is between 100 and 160 (max), set speed to max
+          pwmA=255;
+          pwmB=255;
+        }
+        //
+        // The next two IF statements cover right or left turns
+        //
+        if (xDifference >=0 && abs(xDifference)>=50)
+        {
+          // if object is on right half of frame
+          turnRight(pwmA,pwmB);
+          Serial.println("Right");
+        }
+        if (xDifference <=0 && abs(xDifference)>=50)
+        {
+          // if object is on right half of frame
+          turnLeft(pwmA,pwmB);
+          Serial.println("Left");
+        }
+        //
+        // The following IF statement stops the motors
+        //
         if (avg < 22)
         {
+          // if object is closer than minimum follow distance, STOP
           driveStop();
-          driveReverse();
           Serial.println("Stop");
         }
         //Serial.print("Width: ");
@@ -390,6 +430,6 @@ blocks = pixy.ccc.getBlocks();
         Serial.print(avg);
         Serial.println("in. ");
         Serial.println("-----------------");
-       }
-     }
+    }
+    } // end processing of block
 }
