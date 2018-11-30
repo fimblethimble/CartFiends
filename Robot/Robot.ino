@@ -67,28 +67,31 @@
   // CC2=Blue
   // CC3=Pink
 // Ultrasonic Setup
+    // Sensor 1: Front facing, left side
     const int  echo1=30;
     const int  trig1=31;
-    int  duration1=0;
-    int  distance1=0;
+    long duration1=0;
+    long distance1=0;
+    // Sensor 2: Left facing
     const int  echo2=32;
     const int  trig2=33;
-    int  duration2=0;
-    int  distance2=0;
+    long duration2=0;
+    long distance2=0;
+    // Sensor 3: Front facing, right side
     const int  echo3=34;
     const int  trig3=35;
-    int  duration3=0;
-    int  distance3=0;
+    long duration3=0;
+    long distance3=0;
+    // Sensor 4: Right facing
     const int  echo4=36;
     const int  trig4=37;
-    int  duration4=0;
-    int  distance4=0;
+    long duration4=0;
+    long distance4=0;
+    // Sensor 5: Rear facing, center
     const int  echo5=38;
     const int  trig5=39;
-    int  duration5=0;
-    int  distance5=0;
-    long duration;
-    long distance;
+    long duration5=0;
+    long distance5=0;
 // end declarations
 void setup()
 {
@@ -131,32 +134,42 @@ void setup()
 //
 void ultrasonic()
 {
-  // Clears the trigPins
+  // Read Sensor 1
     digitalWrite(trig1, LOW);
-    digitalWrite(trig2, LOW);
-    digitalWrite(trig3, LOW);
-    digitalWrite(trig4, LOW);
-    digitalWrite(trig5, LOW);
     delayMicroseconds(2);
-  // Sets the trigPins on HIGH state for 10 micro seconds
     digitalWrite(trig1, HIGH);
-    digitalWrite(trig2, HIGH);
-    digitalWrite(trig3, HIGH);
-    digitalWrite(trig4, HIGH);
-    digitalWrite(trig5, HIGH);
     delayMicroseconds(10);
     digitalWrite(trig1, LOW);
-    digitalWrite(trig2, LOW);
-    digitalWrite(trig3, LOW);
-    digitalWrite(trig4, LOW);
-    digitalWrite(trig5, LOW);
-  // Reads the echoPins, returns the sound wave travel time in microseconds
     duration1 = pulseIn(echo1, HIGH);
+  // Read Sensor 2
+    digitalWrite(trig2, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig2, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig2, LOW);
     duration2 = pulseIn(echo2, HIGH);
+ // Read Sensor 3
+    digitalWrite(trig3, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig3, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig3, LOW);
     duration3 = pulseIn(echo3, HIGH);
+ // Read Sensor 4
+    digitalWrite(trig4, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig4, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig4, LOW);
     duration4 = pulseIn(echo4, HIGH);
+ // Read Sensor 5
+    digitalWrite(trig5, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig5, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig5, LOW);
     duration5 = pulseIn(echo5, HIGH);
-  // Calculating the distance (inches)
+  // Calculate the distance (inches)
     distance1 = duration1*0.393701*0.034/2;
     distance2 = duration2*0.393701*0.034/2;
     distance3 = duration3*0.393701*0.034/2;
@@ -316,6 +329,7 @@ void loop() // need a "no object found" case
   // IF there is a block added to array, run the following:
   // 1) Every FIVE frames, print block data. Previously 50.
   // NOTE: need to verify if this i = frames or # of blocks
+  // or if it is the age of the object
     if (i%5==0)
     {
       sprintf(buf, "Detected %d:\n", blocks);
@@ -325,9 +339,9 @@ void loop() // need a "no object found" case
     for (j=0; j<blocks; j++)
     {
     // Maybe print the J index here to tell if its processing multiple objs.
-    // sprintf(buf, "  block %d: ", j);
-    // Serial.print(buf);
-    // Calculate positional data
+      // sprintf(buf, "  block %d: ", j);
+      // Serial.print(buf);
+      // Calculate positional data
         signature = pixy.ccc.blocks[j].m_signature; // get color sig as int(?)
         pixelsWidth = pixy.ccc.blocks[j].m_width;
         pixelsHeight = pixy.ccc.blocks[j].m_height;
