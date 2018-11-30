@@ -67,24 +67,24 @@
   // CC2=Blue
   // CC3=Pink
 // Ultrasonic Setup
-    const int  echo1=26;
-    const int  trig1=27;
+    const int  echo1=30;
+    const int  trig1=31;
     int  duration1=0;
     int  distance1=0;
-    const int  echo2=28;
-    const int  trig2=29;
+    const int  echo2=32;
+    const int  trig2=33;
     int  duration2=0;
     int  distance2=0;
-    const int  echo3=30;
-    const int  trig3=31;
+    const int  echo3=34;
+    const int  trig3=35;
     int  duration3=0;
     int  distance3=0;
-    const int  echo4=32;
-    const int  trig4=33;
+    const int  echo4=36;
+    const int  trig4=37;
     int  duration4=0;
     int  distance4=0;
-    const int  echo5=34;
-    const int  trig5=35;
+    const int  echo5=38;
+    const int  trig5=39;
     int  duration5=0;
     int  distance5=0;
     long duration;
