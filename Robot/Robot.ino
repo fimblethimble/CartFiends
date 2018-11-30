@@ -364,6 +364,9 @@ void loop() // need a "no object found" case
         Serial.print(" - ");
         Serial.print("xDifference: ");
         Serial.println(xDifference);
+        Serial.print("Average: ");
+        Serial.print(avg);
+        Serial.println("in. ");
     // Navigation and Control Signals here
       // Based on magnitude of X offset, set motor speed.
         /*
@@ -440,9 +443,6 @@ void loop() // need a "no object found" case
         //Serial.print("in. ");
         //Serial.print("Distance H: ");
         //Serial.print(distanceHeight);
-        Serial.print("Average: ");
-        Serial.print(avg);
-        Serial.println("in. ");
         Serial.println("-----------------");
     }
     } // end processing of block
