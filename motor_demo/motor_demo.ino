@@ -6,14 +6,12 @@ int speedA = 1000; // left motor (1) (microseconds)
 int speedB = 1000; // right motor (2) (microseconds)
 // There are two motor drivers connected to each motor, with one inputs each.
 // Motor1
-#define signal1 2 // left motor
+#define signal1 3 // left motor
 // Motor2
-#define signal2 3 // right motor
+#define signal2 2 // right motor
 // end declarations
 void setup()
 {
-  pinMode(signal1,OUTPUT);
-  pinMode(signal2,OUTPUT);
   // put your SETUP CODE HERE, to run ONCE:
   Serial.begin(9600); // start 115200bt/s communication for NewPing & cam
   // set all the motor control pins to outputs
@@ -41,12 +39,16 @@ void driveStop() //turns off all motors
 //
 void loop() // main method to call the rest
 {
-  Serial.println("FORWARD 75%");
-  driveForward(1500,1500);
-  delay(3000);
-  Serial.println("STOP");
+  Serial.println("SWITCH OFF");
   driveStop();
-  delay(3000);
+  delay(5000);
+  Serial.println("SWITCH ON LEFT");
+  driveForward(1500,1000);
+  delay(5000);
+  Serial.println("SWITCH TO RIGHT");
+  driveForward(1000,1500);
+  delay(5000);
+  Serial.println("---------------");
   //Serial.println("FORWARD 75%");
   //driveForward(1750,1750);
   //delay(2000);

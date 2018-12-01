@@ -13,9 +13,9 @@
     int speedB = 1000; // right motor (2) (microseconds)
   // There are two motor drivers connected to each motor, with one inputs each.
     // Motor1
-    #define signal1 2 // left motor
+    #define signal1 3 // left motor
     // Motor2
-    #define signal2 3 // right motor
+    #define signal2 2 // right motor
 // Pixy Setup
   // PINK = SIGNATURE 1  (NOT CC1)
   // GREEN = SIGNATURE 2 (NOT CC2)
@@ -211,12 +211,26 @@ void loop() // need a "no object found" case
     ultrasonic();
     if (distance1<5 || distance2<5 || distance3<5 || distance4<5)
     {
-    tone(piezoPin,1500,200); // tone (pin,frequency,ms duration)
-    delay(400);
-    tone(piezoPin,1500,200); // tone (pin,frequency,ms duration)
-    delay(400);
-    tone(piezoPin,1500,200); // tone (pin,frequency,ms duration)
-    delay(400);
+      tone(piezoPin,1500,200); // tone (pin,frequency,ms duration)
+      delay(400);
+      tone(piezoPin,1500,200); // tone (pin,frequency,ms duration)
+      delay(400);
+      tone(piezoPin,1500,200); // tone (pin,frequency,ms duration)
+      delay(400);
+    }
+    if (distance1<15)
+    {
+      // if front facing left side covered, turn right
+      turnRight(1600,1200);
+      delay(1000);
+      Serial.println("US TURN RIGHT");
+    }
+    if (distance3<15)
+    {
+      // if front facing right side covered, turn left
+      turnLeft(1200,1600);
+      delay(1000);
+      Serial.println("US TURN LEFT");
     }
   // Initialize values for blocks array
     static int i = 0;
@@ -268,11 +282,11 @@ void loop() // need a "no object found" case
         Serial.print("xDifference: ");
         Serial.println(xDifference);
 */
-        Serial.print("Signature: ");
-        Serial.println(signature);
-        Serial.print("Average: ");
-        Serial.print(avg);
-        Serial.println("in. ");
+        //Serial.print("Signature: ");
+        //Serial.println(signature);
+        //Serial.print("Average: ");
+        //Serial.print(avg);
+        //Serial.println("in. ");
 
     // Navigation and Control Signals here
       // Based on magnitude of X offset, set motor speed.
@@ -302,7 +316,7 @@ void loop() // need a "no object found" case
             tone(piezoPin,4000,200); // tone (pin,frequency,ms duration)
             delay(400);
           }
-          else if (avg < 27)
+          else if (avg < 33)
           {
             // if object is closer than minimum follow distance, STOP
             driveStop();
@@ -313,55 +327,49 @@ void loop() // need a "no object found" case
           //
           // The first two IF statements cover the forward driving case.
           //
-          if (xDifference<=0 && xDifference> -100)
+          if (xDifference<=40 && xDifference> -140)
           {
             // if the x offset is between 0 & -50, scale one PWM speed down
-            speedA=2000-(.5*xDifferenceABS);  // left wheel slower than right
-            speedB=1700;
-            driveForward(speedA,speedB);
+            speedA=1200;  // left wheel slower than right
+            speedB=1650;
             Serial.println("forward/left");
-            delay(1000);
+            driveForward(speedA,speedB);
+            delay(50);
           }
-          if (xDifference>0 && xDifference< 100)
+          if (xDifference >= -40 && xDifference <= 40)
+          {
+            speedA=1600;
+            speedB=1650;
+            driveForward(speedA,speedB);
+            Serial.println("forward");
+            delay(50);
+          }
+          if (xDifference>40 && xDifference< 140)
           {
             // if the x offset is between 0 & 50, scale one PWM speed down
-            speedA=1800;
-            speedB=1800-(3*xDifferenceABS); //right wheel slower than left
+            speedA=1600;
+            speedB=1250; //right wheel slower than left
             driveForward(speedA,speedB);
             Serial.println("forward/right");
-            delay(1000);
+            delay(50);
           }
-          //
-          // The next two IF statements set the speed for left/right turning
-          //
-          if (xDifferenceABS>=100 && xDifferenceABS<120)
-          {
-            // if the x offset is between 50 and 100, set speed to 70%
-            speedA=1800;
-            speedB=1700;
-          }
-          if (xDifferenceABS>=120 && xDifferenceABS<160)
-          {
-            // if the x offset is between 100 and 160 (max), set speed to 100%
-            speedA=1800;
-            speedB=1700;
-          }
-          //
           // The next two IF statements cover right or left turns
           //
-          if (xDifference > 0 && abs(xDifference) >=50)
+          if (xDifference > 0 && abs(xDifference) >=140)
           {
             // if object is on right half of frame
-            turnRight(speedA,1100);
+            turnRight(1600,1200);
             Serial.println("Right");
             delay(500);
+            driveStop();
           }
-          if (xDifference < 0 && abs(xDifference) >= 50)
+          if (xDifference < 0 && abs(xDifference) >= 140)
           {
             // if object is on left half of frame
-            turnLeft(1400,speedB);
+            turnLeft(1200,1600);
             Serial.println("Left");
             delay(500);
+            driveStop();
           }
         }
           //end control processing
