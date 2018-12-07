@@ -209,7 +209,7 @@ void loop() // need a "no object found" case
 {
   // At every loop, check proximity sensors first. (~100 microsec)
   ultrasonic();
-  if (distance1 < 5 || distance2 < 5 || disance3 < 5 || distance4 <5)
+  if (distance1 < 5 || distance2 < 5 || distance3 < 5 || distance4 <5)
   {
     tone(piezoPin, 1500, 200); // tone (pin,frequency,ms duration)
     delay(400);
@@ -318,7 +318,7 @@ void loop() // need a "no object found" case
         tone(piezoPin, 4000, 200); // tone (pin,frequency,ms duration)
         delay(400);
       }
-      else if (avg < 33)
+      else if (avg < 10) // need to recalibrate
       {
         // if object is closer than minimum follow distance, STOP
         driveStop();
@@ -329,48 +329,48 @@ void loop() // need a "no object found" case
         //
         // The first two IF statements cover the forward driving case.
         //
-        if (xDifference <= 40 && xDifference > -140)
+        if (xDifference <= -40 && xDifference > -140)
         {
           // if the x offset is between 0 & -50, scale one PWM speed down
-          speedA = 1200;
-          speedB = 1200;
           Serial.println("forward/left");
-          driveForward(speedA, speedB);
-          delay(50);
+          driveForward(1900,2000);
+          delay(100);
+          driveForward(1000,1200);
+          delay(150);
         }
         if (xDifference > -40 && xDifference < 40)
         {
-          speedA = 1200;
-          speedB = 1200;
-          driveForward(speedA, speedB);
           Serial.println("forward");
+          driveForward(2000,2000);
+          delay(100);
+          driveForward(1600,1600);
           delay(50);
         }
         if (xDifference > 40 && xDifference < 140)
         {
           // if the x offset is between 0 & 50, scale one PWM speed down
-          speedA = 1200;
-          speedB = 1200;
-          driveForward(speedA, speedB);
           Serial.println("forward/right");
-          delay(50);
+          driveForward(2000,1900);
+          delay(100);
+          driveForward(1200,1000);
+          delay(150);
         }
         // The next two IF statements cover right or left turns
         //
         if (xDifference > 0 && abs(xDifference) >= 140)
         {
           // if object is on right half of frame
-          turnRight(1200, 1000);
+          turnRight(1600, 1100);
           Serial.println("Right");
-          delay(500);
+          delay(400);
           driveStop();
         }
         if (xDifference < 0 && abs(xDifference) >= 140)
         {
           // if object is on left half of frame
-          turnLeft(1000, 1200);
+          turnLeft(1100, 1600);
           Serial.println("Left");
-          delay(500);
+          delay(400);
           driveStop();
         }
       }

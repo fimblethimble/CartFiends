@@ -41,35 +41,35 @@ void loop() // main method to call the rest
 {
   Serial.println("SWITCH OFF");
   driveStop();
-  delay(6000);
-  Serial.println("FWD 10%");
-  driveForward(1100,1100);
-  delay(4000);
-  Serial.println("FWD 20%");
-  driveForward(1200,1200);
-  delay(4000);
-  Serial.println("FWD 30%");
+  delay(7000);
+  Serial.println("FWD START");
+  driveForward(1800,1800);
+  delay(500);
   driveForward(1300,1300);
   delay(4000);
+//  Serial.println("LEFT");
+//  driveForward(1200,1400);
+//  delay(7000);
+// extended drive test
+/*  
   Serial.println("FWD 40%");
   driveForward(1400,1400);
-  delay(4000);
-  Serial.println("FWD 50%");
-  driveForward(1500,1500);
-  delay(4000);
-  Serial.println("FWD 60%");
-  driveForward(1600,1600);
-  delay(4000);
-  Serial.println("FWD 70%");
-  driveForward(1700,1700);
-  delay(4000);
+  delay(6000);
   Serial.println("FWD 80%");
   driveForward(1800,1800);
-  delay(4000);
-  Serial.println("FWD 90%");
-  driveForward(1900,1900);
-  delay(4000);
-  Serial.println("FWD 90%");
+  delay(6000);
+  Serial.println("FWD 100%");
   driveForward(2000,2000);
+  delay(6000);
+  Serial.println("SWITCH OFF");
+  driveStop();
   delay(4000);
+  Serial.println("R WHEEL 100%");
+  driveForward(1000,2000);
+  delay(4000);
+  Serial.println("L WHEEL 100%");
+  driveForward(2000,1000);
+  delay(4000);
+*/
+// end extended drive test
 }
